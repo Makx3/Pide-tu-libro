@@ -1,7 +1,6 @@
 package GUIs;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -16,54 +15,40 @@ public class fmrMenu extends JFrame {
     private JTextField texBuscarLibro;
     private JLabel labPideTuLibro;
     private JButton botMostrarPerfil;
-    private JTable tabLibros;
+    private JList<String> Lista_libros;
     private fmrLogin ventanaLogin;
 
     public fmrMenu(fmrLogin ventanaLogin) {
-        this.ventanaLogin = ventanaLogin;  // Guardar la referencia a la ventana de login
+        this.ventanaLogin = ventanaLogin;
 
+        initComponents();
+
+
+        cargarDatosEnLista();
+    }
+
+    private void initComponents() {
         setVisible(true);
         setSize(800, 600);
         setLocationRelativeTo(null);
         setTitle("Menú");
         setContentPane(jpMenu);
 
-        // Crear la tabla con un modelo por defecto
-        DefaultTableModel modeloTabla = new DefaultTableModel();
-        modeloTabla.addColumn("Título");
-        modeloTabla.addColumn("Autor");
-        modeloTabla.addColumn("ISBN");
-        modeloTabla.addColumn("Estado");
-
-        // Crear la tabla con el modelo
-        tabLibros = new JTable(modeloTabla);
-
-        // Crear el JScrollPane y agregar la tabla a él
-        scrollPane = new JScrollPane(tabLibros);
-        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-
-        // Botón "Cerrar Sesión":
         botCerrarSesion.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Cerrar la ventana de menú
                 dispose();
-
-                // Abrir nuevamente la ventana de inicio de sesión
                 ventanaLogin.setVisible(true);
             }
         });
 
-        // Botón "Buscar":
         btnBuscar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Llamar a la función para cargar los datos en la tabla
-                cargarDatosEnTabla();
+                cargarDatosEnLista();
             }
         });
 
-        // Botón "Mostrar perfil"
         botMostrarPerfil.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -74,24 +59,31 @@ public class fmrMenu extends JFrame {
         });
     }
 
-    // Método para cargar datos en la tabla
-    private void cargarDatosEnTabla() {
-        // Obtener la lista de libros (puedes adaptarlo para obtener revistas si es necesario)
+    private void cargarDatosEnLista() {
         List<Object[]> librosData = csvLibros.listadoLibros(null);
 
-        // Obtener el modelo de la tabla
-        DefaultTableModel modeloTabla = (DefaultTableModel) tabLibros.getModel();
+        DefaultListModel<String> modeloLista = new DefaultListModel<>();
 
-        // Limpiar la tabla antes de agregar nuevos datos
-        modeloTabla.setRowCount(0);
+        // encabezado de la lista
+        modeloLista.addElement("ID | Título | Autor | Estado | ISBN | Edición");
 
-        // Agregar los datos de la lista a la tabla
+        // Agregar información a la lista
         for (Object[] rowData : librosData) {
-            modeloTabla.addRow(rowData);
+            String idLibro = (String) rowData[0];
+            String tituloLibro = (String) rowData[1];
+            String autorLibro = (String) rowData[2];
+            boolean estadoLibro = (boolean) rowData[3];
+            String isbnLibro = (String) rowData[4];
+            String edicionLibro = (String) rowData[5];
+
+            String infoLibro = String.format("%s | %s | %s | %s | %s | %s",
+                    idLibro, tituloLibro, autorLibro, estadoLibro, isbnLibro, edicionLibro);
+
+            modeloLista.addElement(infoLibro);
         }
+        Lista_libros.setModel(modeloLista);
     }
 
     private void createUIComponents() {
-        // TODO: place custom component creation code here
     }
 }
