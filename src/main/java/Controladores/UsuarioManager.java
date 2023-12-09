@@ -1,6 +1,5 @@
 package Controladores;
 
-import Modelo.*;
 import java.io.*;
 
 public class UsuarioManager {

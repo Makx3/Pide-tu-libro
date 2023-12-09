@@ -1,0 +1,4 @@
+ID,TITULO,AUTOR,ESTADO,ISBN,EDICION,GENERO
+1,Libro 1,Autor 1,true,978-3-16-148410-0,Primera Edición,Ficción
+2,Libro 2,Autor 2,false,978-1-23-456789-0,Segunda Edición,No Ficción
+3,Libro 3,Autor 3,true,978-0-98-765432-1,Tercera Edición,Aventura
