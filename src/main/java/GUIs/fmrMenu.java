@@ -5,24 +5,27 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-import Controladores.csvLibros;
+import Clases.Usuario;
+import Controladores.*;
 
 public class fmrMenu extends JFrame {
-    private JButton btnBuscar;
-    private JPanel jpMenu;
-    private JButton botCerrarSesion;
-    private JScrollPane scrollPane;
-    private JTextField texBuscarLibro;
-    private JLabel labPideTuLibro;
-    private JButton botMostrarPerfil;
+    private JButton reservarButton;
     private JList<String> Lista_libros;
+    private JTextField texBuscarLibro;
+    private JButton btnBuscar;
+    private JLabel labPideTuLibro;
+    private JButton botCerrarSesion;
+    private JButton botMostrarPerfil;
+    private JPanel jpMenu;
+    private List<Object[]> librosData;
     private fmrLogin ventanaLogin;
+    private Usuario usuarioLogeado;
 
-    public fmrMenu(fmrLogin ventanaLogin) {
+    public fmrMenu(fmrLogin ventanaLogin, Usuario usuarioLogeado) {
         this.ventanaLogin = ventanaLogin;
+        this.usuarioLogeado = usuarioLogeado;
 
         initComponents();
-
 
         cargarDatosEnLista();
     }
@@ -42,32 +45,20 @@ public class fmrMenu extends JFrame {
             }
         });
 
-        btnBuscar.addActionListener(new ActionListener() {
+        reservarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cargarDatosEnLista();
+                reservarLibro();
             }
         });
 
-        botMostrarPerfil.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                fmrPerfil ventanaPerfil = new fmrPerfil();
-                ventanaPerfil.setVisible(true);
-                dispose();
-            }
-        });
+        cargarDatosEnLista();
     }
 
     private void cargarDatosEnLista() {
-        List<Object[]> librosData = csvLibros.listadoLibros(null);
-
+        librosData = csvLibros.listadoLibrosDisponibles();
         DefaultListModel<String> modeloLista = new DefaultListModel<>();
 
-        // encabezado de la lista
-        modeloLista.addElement("ID | Título | Autor | Estado | ISBN | Edición");
-
-        // Agregar información a la lista
         for (Object[] rowData : librosData) {
             String idLibro = (String) rowData[0];
             String tituloLibro = (String) rowData[1];
@@ -77,13 +68,44 @@ public class fmrMenu extends JFrame {
             String edicionLibro = (String) rowData[5];
 
             String infoLibro = String.format("%s | %s | %s | %s | %s | %s",
-                    idLibro, tituloLibro, autorLibro, estadoLibro, isbnLibro, edicionLibro);
+                    idLibro, tituloLibro, autorLibro, estadoLibro ? "Reservado" : "Disponible", isbnLibro, edicionLibro);
 
             modeloLista.addElement(infoLibro);
         }
+
         Lista_libros.setModel(modeloLista);
     }
 
-    private void createUIComponents() {
+    private void reservarLibro() {
+        int indiceSeleccionado = Lista_libros.getSelectedIndex();
+
+        if (indiceSeleccionado != -1) {
+            Object[] rowData = librosData.get(indiceSeleccionado);
+            String idLibro = (String) rowData[0];
+
+
+            if (csvReservados.estaLibroReservado(idLibro)) {
+                JOptionPane.showMessageDialog(null, "Este libro ya está reservado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+
+            int nuevaCantidadReservados = usuarioLogeado.getCantidadReservados() + 1;
+            usuarioLogeado.setCantidadReservados(nuevaCantidadReservados);
+
+
+            String entradaReservados = String.format("%s,%s,%s,%d,%s,%s,%s,%s,%s,%s",
+                    usuarioLogeado.getRut(), usuarioLogeado.getNombre(), usuarioLogeado.getApellido(),
+                    nuevaCantidadReservados, idLibro, rowData[1], rowData[2], rowData[3], rowData[4], rowData[5]);
+
+            csvReservados.agregarReservado(entradaReservados);
+            UsuarioManager.actualizarCantidadReservados(usuarioLogeado.getRut(), nuevaCantidadReservados);
+
+            cargarDatosEnLista();
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor, seleccione un libro para reservar.",
+                    "Advertencia", JOptionPane.WARNING_MESSAGE);
+        }
     }
+
 }

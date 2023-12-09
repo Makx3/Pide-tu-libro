@@ -4,16 +4,17 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import Clases.Usuario;
 import Controladores.UsuarioManager;
 
 public class fmrLogin extends JFrame {
     private JPanel jpLogin;
     private JTextField texRut;
-    private JLabel labTitulo;
     private JPasswordField texContraseña;
+    private JButton botIniciarSesion;
     private JLabel labNombre;
     private JLabel labContraseña;
-    private JButton botIniciarSesion;
+    private JLabel labTitulo;
 
     public fmrLogin() {
         setVisible(true);
@@ -25,23 +26,23 @@ public class fmrLogin extends JFrame {
         botIniciarSesion.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 String rut = texRut.getText();
                 String contraseña = new String(texContraseña.getPassword());
 
-                if (UsuarioManager.verificarAutenticacion(rut, contraseña)) {
-                    fmrMenu ventanaMenu = new fmrMenu(fmrLogin.this);
+                Usuario usuarioLogeado = UsuarioManager.verificarAutenticacion(rut, contraseña);
+
+                if (usuarioLogeado != null) {
+                    fmrMenu ventanaMenu = new fmrMenu(fmrLogin.this, usuarioLogeado);
                     ventanaMenu.setVisible(true);
                     dispose();
-
                 } else {
                     JOptionPane.showMessageDialog(null, "RUT o contraseña incorrectos", "Error de Autenticación", JOptionPane.ERROR_MESSAGE);
-
                     limpiarCampos();
                 }
             }
         });
     }
+
     private void limpiarCampos() {
         texRut.setText("");
         texContraseña.setText("");
