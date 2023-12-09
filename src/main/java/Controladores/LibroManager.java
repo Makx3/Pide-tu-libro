@@ -1,14 +1,10 @@
 package Controladores;
 
-import Clases.Libro;
-
-import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
-public class csvLibros {
+public class LibroManager {
 
     // ATRIBUTOS
     public static final String nombreArchivoLibros = "Libros.csv";

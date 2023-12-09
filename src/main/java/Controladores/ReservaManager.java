@@ -2,7 +2,7 @@ package Controladores;
 
 import java.io.*;
 
-public class csvReservados {
+public class ReservaManager {
 
     public static final String nombreArchivoReservados = "Reservados.csv";
 

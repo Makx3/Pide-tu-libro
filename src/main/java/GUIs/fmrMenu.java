@@ -37,6 +37,7 @@ public class fmrMenu extends JFrame {
         setTitle("Menú");
         setContentPane(jpMenu);
 
+        //Botón "Cerrar sesión":
         botCerrarSesion.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -45,6 +46,7 @@ public class fmrMenu extends JFrame {
             }
         });
 
+        //Botón "Reservar":
         reservarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -56,7 +58,7 @@ public class fmrMenu extends JFrame {
     }
 
     private void cargarDatosEnLista() {
-        librosData = csvLibros.listadoLibrosDisponibles();
+        librosData = LibroManager.listadoLibrosDisponibles();
         DefaultListModel<String> modeloLista = new DefaultListModel<>();
 
         for (Object[] rowData : librosData) {
@@ -84,7 +86,7 @@ public class fmrMenu extends JFrame {
             String idLibro = (String) rowData[0];
 
 
-            if (csvReservados.estaLibroReservado(idLibro)) {
+            if (ReservaManager.estaLibroReservado(idLibro)) {
                 JOptionPane.showMessageDialog(null, "Este libro ya está reservado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
                 return;
             }
@@ -98,7 +100,7 @@ public class fmrMenu extends JFrame {
                     usuarioLogeado.getRut(), usuarioLogeado.getNombre(), usuarioLogeado.getApellido(),
                     nuevaCantidadReservados, idLibro, rowData[1], rowData[2], rowData[3], rowData[4], rowData[5]);
 
-            csvReservados.agregarReservado(entradaReservados);
+            ReservaManager.agregarReservado(entradaReservados);
             UsuarioManager.actualizarCantidadReservados(usuarioLogeado.getRut(), nuevaCantidadReservados);
 
             cargarDatosEnLista();
@@ -106,6 +108,19 @@ public class fmrMenu extends JFrame {
             JOptionPane.showMessageDialog(null, "Por favor, seleccione un libro para reservar.",
                     "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
+
+        //>---Botón "Mostrar perfil":
+        botMostrarPerfil.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                fmrPerfil ventanaPerfil = new fmrPerfil();
+                ventanaPerfil.setVisible(true);
+                dispose();
+            }
+        });
+
     }
+
 
 }
