@@ -3,11 +3,12 @@ package Controladores;
 import Clases.Usuario;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.BufferedWriter;
-import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class UsuarioManager {
@@ -91,46 +92,40 @@ public class UsuarioManager {
 
     public static void actualizarCantidadReservados(String rut, int nuevaCantidadReservados) {
         try {
-            File archivo = new File(nombreArchivoUsuarios);
-            File archivoTemp = new File(nombreArchivoUsuarios + ".temp");
+            BufferedReader lector = new BufferedReader(new FileReader(nombreArchivoUsuarios));
+            List<String> lineas = new ArrayList<>();
 
-            BufferedReader lector = new BufferedReader(new FileReader(archivo));
-            BufferedWriter escritor = new BufferedWriter(new FileWriter(archivoTemp));
-
+            String linea;
             boolean primeraLinea = true;
 
-            while (lector.ready()) {
-                String linea = lector.readLine();
-
+            while ((linea = lector.readLine()) != null) {
                 if (primeraLinea) {
                     primeraLinea = false;
-                    escritor.write(linea);
+                    lineas.add(linea);  // Agrega la primera línea sin cambios
+                    continue;
+                }
+
+                String[] campos = linea.split(",");
+                if (campos.length >= 6 && campos[0].equals(rut)) {
+                    // Encuentra la línea del usuario y actualiza la cantidad de reservados
+                    campos[5] = String.valueOf(nuevaCantidadReservados);
+                    lineas.add(String.join(",", campos));
                 } else {
-                    String[] campos = linea.split(",");
-                    if (campos.length >= 6) {
-                        String rutUsuario = campos[0].trim();
-                        String nuevaLinea = linea;
-
-                        if (rut.equals(rutUsuario)) {
-                            // Si el RUT coincide, actualiza la cantidad de reservados
-                            nuevaLinea = String.format("%s,%s,%s,%s,%s,%d",
-                                    campos[0], campos[1], campos[2], campos[3], campos[4], nuevaCantidadReservados);
-                        }
-
-                        escritor.write(nuevaLinea);
-                    }
-                    escritor.newLine();
+                    lineas.add(linea);  // Agrega las demás líneas sin cambios
                 }
             }
-
             lector.close();
-            escritor.close();
 
-            // Elimina el archivo original y renombra el temporal
-            archivo.delete();
-            archivoTemp.renameTo(archivo);
+            // Vuelve a escribir todas las líneas en el archivo
+            BufferedWriter escritor = new BufferedWriter(new FileWriter(nombreArchivoUsuarios));
+            for (String nuevaLinea : lineas) {
+                escritor.write(nuevaLinea);
+                escritor.newLine();
+            }
+            escritor.close();
         } catch (IOException e) {
-            System.err.println("Hubo un error al actualizar la cantidad de reservados: " + e.getMessage());
+            System.err.println("Error al actualizar la cantidad de reservados: " + e.getMessage());
         }
     }
 }
+

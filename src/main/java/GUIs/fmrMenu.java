@@ -4,8 +4,10 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.ArrayList;
 import Controladores.*;
 import Clases.*;
+
 public class fmrMenu extends JFrame {
     private JButton reservarButton;
     private JList<String> Lista_libros;
@@ -22,6 +24,7 @@ public class fmrMenu extends JFrame {
     public fmrMenu(fmrLogin ventanaLogin, Usuario usuarioLogeado) {
         this.ventanaLogin = ventanaLogin;
         this.usuarioLogeado = usuarioLogeado;
+        this.librosData = new ArrayList<>();
 
         initComponents();
 
@@ -74,16 +77,14 @@ public class fmrMenu extends JFrame {
     }
 
     private void cargarDatosEnLista() {
-        List<Object[]> librosData;
 
-        //Verifica si el campo de búsqueda está vacío
         String filtroNombre = texBuscarLibro.getText().trim();
 
         if (!filtroNombre.isEmpty()) {
-            // Realiza la búsqueda por nombre
+
             librosData = LibroManager.buscarLibrosPorNombre(filtroNombre);
         } else {
-            // Si el campo está vacío, carga todos los libros disponibles
+
             librosData = LibroManager.obtenerTodosLibros();
         }
 
@@ -100,34 +101,34 @@ public class fmrMenu extends JFrame {
                 String isbnLibro = (String) rowData[4];
                 String edicionLibro = (String) rowData[5];
 
-                String infoLibro = String.format("%s | %s | %s | %s | %s | %s",
-                        idLibro, tituloLibro, autorLibro, estadoLibro ? "Reservado" : "Disponible", isbnLibro, edicionLibro);
+                if (!estadoLibro) {
+                    String infoLibro = String.format("%s | %s | %s | %s | %s | %s",
+                            idLibro, tituloLibro, autorLibro, estadoLibro ? "Reservado" : "Disponible", isbnLibro, edicionLibro);
 
-                modeloLista.addElement(infoLibro);
+                    modeloLista.addElement(infoLibro);
+                }
             }
         }
 
         Lista_libros.setModel(modeloLista);
     }
 
-
     private void reservarLibro() {
         int indiceSeleccionado = Lista_libros.getSelectedIndex();
 
-        if (indiceSeleccionado != -1) {
+        if (librosData != null && indiceSeleccionado >= 0 && indiceSeleccionado < librosData.size()) {
             Object[] rowData = librosData.get(indiceSeleccionado);
             String idLibro = (String) rowData[0];
-
 
             if (ReservaManager.estaLibroReservado(idLibro)) {
                 JOptionPane.showMessageDialog(null, "Este libro ya está reservado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
+            Usuario usuarioLogeado = this.usuarioLogeado;
 
             int nuevaCantidadReservados = usuarioLogeado.getCantidadReservados() + 1;
             usuarioLogeado.setCantidadReservados(nuevaCantidadReservados);
-
 
             String entradaReservados = String.format("%s,%s,%s,%d,%s,%s,%s,%s,%s,%s",
                     usuarioLogeado.getRut(), usuarioLogeado.getNombre(), usuarioLogeado.getApellido(),
@@ -136,22 +137,16 @@ public class fmrMenu extends JFrame {
             ReservaManager.agregarReservado(entradaReservados);
             UsuarioManager.actualizarCantidadReservados(usuarioLogeado.getRut(), nuevaCantidadReservados);
 
+            rowData[3] = true;
+
+            DefaultListModel<String> modeloLista = (DefaultListModel<String>) Lista_libros.getModel();
+            modeloLista.removeElementAt(indiceSeleccionado);
+
             cargarDatosEnLista();
         } else {
             JOptionPane.showMessageDialog(null, "Por favor, seleccione un libro para reservar.",
                     "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
-
-        //>---Botón "Mostrar perfil":
-        botMostrarPerfil.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                fmrPerfil ventanaPerfil = new fmrPerfil();
-                ventanaPerfil.setVisible(true);
-                dispose();
-            }
-        });
-
     }
+
 }
