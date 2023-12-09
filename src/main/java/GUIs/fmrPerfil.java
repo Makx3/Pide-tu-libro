@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class fmrPerfil extends JFrame {
+public class    fmrPerfil extends JFrame {
     private JPanel jpPerfil;
     private JLabel labInformacion;
     private JButton botCerrar;
@@ -34,15 +34,6 @@ public class fmrPerfil extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-            }
-        });
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new fmrPerfil().setVisible(true);
             }
         });
     }

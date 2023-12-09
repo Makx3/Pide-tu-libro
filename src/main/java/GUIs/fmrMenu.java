@@ -4,10 +4,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-
-import Clases.Usuario;
 import Controladores.*;
-
+import Clases.*;
 public class fmrMenu extends JFrame {
     private JButton reservarButton;
     private JList<String> Lista_libros;
@@ -37,7 +35,7 @@ public class fmrMenu extends JFrame {
         setTitle("Menú");
         setContentPane(jpMenu);
 
-        //Botón "Cerrar sesión":
+        // Botón "Cerrar sesión":
         botCerrarSesion.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -46,7 +44,7 @@ public class fmrMenu extends JFrame {
             }
         });
 
-        //Botón "Reservar":
+        // Botón "Reservar":
         reservarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -54,29 +52,64 @@ public class fmrMenu extends JFrame {
             }
         });
 
+        // Botón "Buscar":
+        btnBuscar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cargarDatosEnLista();
+            }
+        });
+
+        // Botón "Mostrar perfil":
+        botMostrarPerfil.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fmrPerfil ventanaPerfil = new fmrPerfil();
+                ventanaPerfil.setVisible(true);
+                dispose();
+            }
+        });
+
         cargarDatosEnLista();
     }
 
     private void cargarDatosEnLista() {
-        librosData = LibroManager.listadoLibrosDisponibles();
+        List<Object[]> librosData;
+
+        //Verifica si el campo de búsqueda está vacío
+        String filtroNombre = texBuscarLibro.getText().trim();
+
+        if (!filtroNombre.isEmpty()) {
+            // Realiza la búsqueda por nombre
+            librosData = LibroManager.buscarLibrosPorNombre(filtroNombre);
+        } else {
+            // Si el campo está vacío, carga todos los libros disponibles
+            librosData = LibroManager.obtenerTodosLibros();
+        }
+
         DefaultListModel<String> modeloLista = new DefaultListModel<>();
 
-        for (Object[] rowData : librosData) {
-            String idLibro = (String) rowData[0];
-            String tituloLibro = (String) rowData[1];
-            String autorLibro = (String) rowData[2];
-            boolean estadoLibro = (boolean) rowData[3];
-            String isbnLibro = (String) rowData[4];
-            String edicionLibro = (String) rowData[5];
+        if (librosData.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Libro no encontrado o nombre incorrecto.", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            for (Object[] rowData : librosData) {
+                String idLibro = (String) rowData[0];
+                String tituloLibro = (String) rowData[1];
+                String autorLibro = (String) rowData[2];
+                boolean estadoLibro = (boolean) rowData[3];
+                String isbnLibro = (String) rowData[4];
+                String edicionLibro = (String) rowData[5];
 
-            String infoLibro = String.format("%s | %s | %s | %s | %s | %s",
-                    idLibro, tituloLibro, autorLibro, estadoLibro ? "Reservado" : "Disponible", isbnLibro, edicionLibro);
+                String infoLibro = String.format("%s | %s | %s | %s | %s | %s",
+                        idLibro, tituloLibro, autorLibro, estadoLibro ? "Reservado" : "Disponible", isbnLibro, edicionLibro);
 
-            modeloLista.addElement(infoLibro);
+                modeloLista.addElement(infoLibro);
+            }
         }
 
         Lista_libros.setModel(modeloLista);
     }
+
 
     private void reservarLibro() {
         int indiceSeleccionado = Lista_libros.getSelectedIndex();
@@ -121,6 +154,4 @@ public class fmrMenu extends JFrame {
         });
 
     }
-
-
 }

@@ -15,13 +15,6 @@ public class Libro {
         this.genero = genero;
     }
 
-    public String getGenero() {
-        return genero;
-    }
-
-    public void setGenero(String genero) {
-        this.genero = genero;
-    }
     public String getId() {
         return id;
     }
@@ -68,5 +61,12 @@ public class Libro {
 
     public void setEdicion(String edicion) {
         this.edicion = edicion;
+    }
+    public String getGenero() {
+        return genero;
+    }
+
+    public void setGenero(String genero) {
+        this.genero = genero;
     }
 }

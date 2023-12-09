@@ -1,16 +1,16 @@
 package Controladores;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LibroManager {
 
-    // ATRIBUTOS
     public static final String nombreArchivoLibros = "Libros.csv";
 
-    // MOSTRAR LIBROS CSV
-    public static List<Object[]> listadoLibros(String filtroIsbn) {
+    public static List<Object[]> obtenerTodosLibros() {
         List<Object[]> librosData = new ArrayList<>();
 
         try {
@@ -36,10 +36,8 @@ public class LibroManager {
                     String edicionLibro = campos[5].trim();
                     String generoLibro = campos[6].trim();
 
-                    if (filtroIsbn == null || isbnLibro.equals(filtroIsbn)) {
-                        Object[] rowData = {idLibro, tituloLibro, autorLibro, estadoLibro, isbnLibro, edicionLibro, generoLibro};
-                        librosData.add(rowData);
-                    }
+                    Object[] rowData = {idLibro, tituloLibro, autorLibro, estadoLibro, isbnLibro, edicionLibro, generoLibro};
+                    librosData.add(rowData);
                 }
             }
             lector.close();
@@ -49,7 +47,7 @@ public class LibroManager {
         return librosData;
     }
 
-    public static List<Object[]> listadoLibrosDisponibles() {
+    public static List<Object[]> buscarLibrosPorNombre(String nombre) {
         List<Object[]> librosData = new ArrayList<>();
 
         try {
@@ -75,7 +73,7 @@ public class LibroManager {
                     String edicionLibro = campos[5].trim();
                     String generoLibro = campos[6].trim();
 
-                    if (!estadoLibro) {
+                    if (!estadoLibro && tituloLibro.equalsIgnoreCase(nombre)) {
                         Object[] rowData = {idLibro, tituloLibro, autorLibro, estadoLibro, isbnLibro, edicionLibro, generoLibro};
                         librosData.add(rowData);
                     }

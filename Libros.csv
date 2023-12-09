@@ -1,4 +1,31 @@
 ID,TITULO,AUTOR,ESTADO,ISBN,EDICION,GENERO
-1,Libro 1,Autor 1,false,978-3-16-148410-0,Primera Edición,Ficción
-2,Libro 2,Autor 2,false,978-1-23-456789-0,Segunda Edición,No Ficción
-3,Libro 3,Autor 3,false,978-0-98-765432-1,Tercera Edición,Aventura
+1,El Señor de los Anillos,J.R.R. Tolkien,false,978-84-450-7787-0,1ª Edición,Fantasía
+2,Cien años de soledad,Gabriel García Márquez,false,978-84-376-0194-4,1ª Edición,Ficción
+3,1984,George Orwell,false,978-84-7509-237-4,2ª Edición,Ciencia Ficción
+4,Don Quijote de la Mancha,Miguel de Cervantes,false,978-84-376-0494-5,1ª Edición,Clásico
+5,Harry Potter y la piedra filosofal,J.K. Rowling,false,978-84-9838-225-6,3ª Edición,Fantasía
+6,Orgullo y prejuicio,Jane Austen,false,978-84-249-1491-4,1ª Edición,Romance
+7,La Odisea,Homero,false,978-84-376-0202-6,1ª Edición,Epic Poem
+8,Fundación,Isaac Asimov,false,978-84-450-7426-1,2ª Edición,Ciencia Ficción
+9,To Kill a Mockingbird,Harper Lee,false,978-0-06-112008-4,1ª Edición,Ficción
+10,El Gran Gatsby,F. Scott Fitzgerald,false,978-84-9104-225-7,1ª Edición,Ficción
+11,Crimen y castigo,Fiodor Dostoievski,false,978-84-249-0049-0,1ª Edición,Novela
+12,La Ilíada,Homero,false,978-84-376-0135-7,1ª Edición,Epic Poem
+13,El Hobbit,J.R.R. Tolkien,false,978-84-450-7791-7,2ª Edición,Fantasía
+14,Matar a un ruiseñor,Harper Lee,false,978-84-670-3345-6,1ª Edición,Ficción
+15,El Principito,Antoine de Saint-Exupéry,false,978-84-480-4165-6,1ª Edición,Cuento
+16,En busca del tiempo perdido,Marcel Proust,false,978-84-339-6500-0,1ª Edición,Ficción
+17,The Catcher in the Rye,J.D. Salinger,false,978-84-339-6249-8,1ª Edición,Ficción
+18,Anna Karenina,León Tolstói,false,978-84-9104-275-2,1ª Edición,Novela
+19,One Hundred Years of Solitude,Gabriel García Márquez,false,978-0-06-112009-1,1ª Edición,Ficción
+20,Drácula,Bram Stoker,false,978-84-376-0340-5,1ª Edición,Terror
+21,Las aventuras de Sherlock Holmes,Arthur Conan Doyle,false,978-84-376-0871-4,1ª Edición,Detective
+22,Lolita,Vladimir Nabokov,false,978-84-940779-2-5,1ª Edición,Ficción
+23,Los juegos del hambre,Suzanne Collins,false,978-84-9838-314-7,1ª Edición,Ciencia Ficción
+24,El código Da Vinci,Dan Brown,false,978-84-9759-351-5,1ª Edición,Misterio
+25,The Great Expectations,Charles Dickens,false,978-84-9104-227-1,1ª Edición,Ficción
+26,The Lord of the Flies,William Golding,false,978-0-14-312940-0,1ª Edición,Ficción
+27,Fahrenheit 451,Ray Bradbury,false,978-84-246-0891-9,1ª Edición,Ciencia Ficción
+28,The Shining,Stephen King,false,978-84-9759-081-1,1ª Edición,Terror
+29,The Hitchhiker's Guide to the Galaxy,Douglas Adams,false,978-0-345-39180-3,1ª Edición,Ciencia Ficción
+30,The Hobbit,J.R.R. Tolkien,false,978-0-261-10237-7,1ª Edición,Fantasía
