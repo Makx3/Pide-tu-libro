@@ -19,11 +19,9 @@ public class UsuarioManager {
             BufferedReader lector = new BufferedReader(new FileReader(nombreArchivoUsuarios));
             String linea;
 
-            boolean primeraLinea = true;
-
             while ((linea = lector.readLine()) != null) {
-                if (primeraLinea) {
-                    primeraLinea = false;
+                // Ignorar la primera línea (encabezado)
+                if (linea.startsWith("RUT,CONTRASEÑA,NOMBRE,APELLIDO,ESTADO,CANTIDAD_RESERVADOS")) {
                     continue;
                 }
 
@@ -38,11 +36,14 @@ public class UsuarioManager {
                     int reservadosUsuario = Integer.parseInt(campos[5].trim());
 
                     if (rut.equals(rutUsuario) && contraseña.equals(contraseñaUsuario)) {
+                        Usuario usuario = new Usuario(rutUsuario, contraseñaUsuario, nombreUsuario, apellidoUsuario, estadoUsuario, reservadosUsuario);
+                        usuario.setUltimoLibroReservadoId(ReservaManager.obtenerUltimoLibroReservadoPorUsuario(rutUsuario));
                         lector.close();
-                        return new Usuario(rutUsuario, contraseñaUsuario, nombreUsuario, apellidoUsuario, estadoUsuario, reservadosUsuario);
+                        return usuario;
                     }
                 }
             }
+
             lector.close();
         } catch (IOException ex) {
             System.err.println("Error al leer el archivo de usuarios: " + ex.getMessage());
@@ -50,6 +51,7 @@ public class UsuarioManager {
 
         return null;
     }
+
 
     public static void actualizarCantidadReservados(String rut, int nuevaCantidadReservados) {
         try {

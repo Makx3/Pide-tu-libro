@@ -45,14 +45,12 @@ public class fmrLogin extends JFrame {
             }
         });
 
-        // Manejar el cierre de la ventana principal
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                // Esta acción se realiza al cerrar la ventana
-                // Aquí puedes agregar lógica adicional si es necesario
+
                 dispose();
-                System.exit(0); // Cierra la aplicación
+                System.exit(0);
             }
         });
     }

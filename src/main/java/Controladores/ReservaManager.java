@@ -47,4 +47,37 @@ public class ReservaManager {
 
         return false;
     }
+
+    public static String obtenerUltimoLibroReservadoPorUsuario(String rutUsuario) {
+        try {
+            BufferedReader lector = new BufferedReader(new FileReader(nombreArchivoReservados));
+            String linea;
+
+            boolean primeraLinea = true;
+
+            while ((linea = lector.readLine()) != null) {
+                if (primeraLinea) {
+                    primeraLinea = false;
+                    continue;
+                }
+
+                String[] campos = linea.split(",");
+
+                if (campos.length >= 6) {  // Ajusta el índice según la estructura de tu CSV
+                    String rutReservador = campos[0].trim();
+
+                    if (rutUsuario.equals(rutReservador)) {
+                        String idLibroReservado = campos[5].trim();  // Ajusta el índice según la estructura de tu CSV
+                        lector.close();
+                        return idLibroReservado;
+                    }
+                }
+            }
+            lector.close();
+        } catch (IOException e) {
+            System.err.println("Hubo un error al leer el archivo de reservados: " + e.getMessage());
+        }
+
+        return null;
+    }
 }

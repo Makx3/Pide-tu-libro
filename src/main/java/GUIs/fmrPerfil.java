@@ -46,5 +46,6 @@ public class fmrPerfil extends JFrame {
         labApellidoCargado.setText(usuarioLogeado.getApellido());
         String estado = usuarioLogeado.isEstado() ? "Activo" : "Inactivo";
         labEstadoCargado.setText(estado);
+        labUltimoReservadoCargado.setText(usuarioLogeado.getUltimoLibroReservadoId());
     }
 }

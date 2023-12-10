@@ -113,6 +113,9 @@ public class fmrMenu extends JFrame {
 
             libro.setEstadoLibro(true);
 
+            // Actualizar el último libro reservado en el objeto Usuario
+            usuarioLogeado.setUltimoLibroReservado(libro.getTituloLibro());
+
             DefaultListModel<Libro> modeloLista = (DefaultListModel<Libro>) Lista_libros.getModel();
             modeloLista.removeElement(libro);
 
