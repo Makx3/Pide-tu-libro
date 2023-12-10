@@ -1,8 +1,8 @@
 ID,TITULO,AUTOR,ESTADO,ISBN,EDICION,GENERO
-1,El Señor de los Anillos,J.R.R. Tolkien,false,978-84-450-7787-0,1ª Edición,Fantasía
-2,Cien años de soledad,Gabriel García Márquez,false,978-84-376-0194-4,1ª Edición,Ficción
-3,1984,George Orwell,false,978-84-7509-237-4,2ª Edición,Ciencia Ficción
-4,Don Quijote de la Mancha,Miguel de Cervantes,false,978-84-376-0494-5,1ª Edición,Clásico
+1,El Señor de los Anillos,J.R.R. Tolkien,true,978-84-450-7787-0,1ª Edición,Fantasía
+2,Cien años de soledad,Gabriel García Márquez,true,978-84-376-0194-4,1ª Edición,Ficción
+3,1984,George Orwell,true,978-84-7509-237-4,2ª Edición,Ciencia Ficción
+4,Don Quijote de la Mancha,Miguel de Cervantes,true,978-84-376-0494-5,1ª Edición,Clásico
 5,Harry Potter y la piedra filosofal,J.K. Rowling,false,978-84-9838-225-6,3ª Edición,Fantasía
 6,Orgullo y prejuicio,Jane Austen,false,978-84-249-1491-4,1ª Edición,Romance
 7,La Odisea,Homero,false,978-84-376-0202-6,1ª Edición,Epic Poem
