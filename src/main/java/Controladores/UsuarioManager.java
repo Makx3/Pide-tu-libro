@@ -51,45 +51,6 @@ public class UsuarioManager {
         return null;
     }
 
-
-    public static Usuario obtenerUsuarioPorRut(String rut) {
-        try {
-            BufferedReader lector = new BufferedReader(new FileReader(nombreArchivoUsuarios));
-            String linea;
-
-            boolean primeraLinea = true;
-
-            while ((linea = lector.readLine()) != null) {
-                if (primeraLinea) {
-                    primeraLinea = false;
-                    continue;
-                }
-
-                String[] campos = linea.split(",");
-
-                if (campos.length >= 6) {
-                    String rutUsuario = campos[0].trim();
-
-                    if (rut.equals(rutUsuario)) {
-                        String contraseña = campos[1].trim();
-                        String nombre = campos[2].trim();
-                        String apellido = campos[3].trim();
-                        boolean estado = Boolean.parseBoolean(campos[4].trim());
-                        int cantidadReservados = Integer.parseInt(campos[5].trim());
-
-                        lector.close();
-                        return new Usuario(rut, contraseña, nombre, apellido, estado, cantidadReservados);
-                    }
-                }
-            }
-            lector.close();
-        } catch (IOException ex) {
-            System.err.println("Error al leer el archivo de usuarios: " + ex.getMessage());
-        }
-
-        return null;
-    }
-
     public static void actualizarCantidadReservados(String rut, int nuevaCantidadReservados) {
         try {
             BufferedReader lector = new BufferedReader(new FileReader(nombreArchivoUsuarios));

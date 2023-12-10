@@ -19,7 +19,6 @@ public class Libro {
         this.generoLibro = generoLibro;
     }
 
-    // Getters y setters (pueden generarse automáticamente en muchos IDEs)
 
     public String getIdLibro() {
         return idLibro;
@@ -76,4 +75,11 @@ public class Libro {
     public void setGeneroLibro(String generoLibro) {
         this.generoLibro = generoLibro;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s | %s | %s | %s | %s | %s",
+                idLibro, tituloLibro, autorLibro, estadoLibro ? "Reservado" : "Disponible", isbnLibro, edicionLibro);
+    }
+
 }

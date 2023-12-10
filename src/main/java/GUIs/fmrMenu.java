@@ -10,7 +10,7 @@ import Clases.*;
 
 public class fmrMenu extends JFrame {
     private JButton reservarButton;
-    private JList<String> Lista_libros;
+    private JList<Libro> Lista_libros;
     private JTextField texBuscarLibro;
     private JButton btnBuscar;
     private JLabel labPideTuLibro;
@@ -76,6 +76,39 @@ public class fmrMenu extends JFrame {
         cargarDatosEnLista();
     }
 
+    private void reservarLibro() {
+        int indiceSeleccionado = Lista_libros.getSelectedIndex();
+
+        if (librosData != null && indiceSeleccionado >= 0 && indiceSeleccionado < librosData.size()) {
+            Libro libro = librosData.get(indiceSeleccionado);
+
+            if (ReservaManager.estaLibroReservado(libro.getIdLibro())) {
+                JOptionPane.showMessageDialog(null, "Este libro ya está reservado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            Usuario usuarioLogeado = this.usuarioLogeado;
+
+            int nuevaCantidadReservados = usuarioLogeado.getCantidadReservados() + 1;
+            usuarioLogeado.setCantidadReservados(nuevaCantidadReservados);
+
+            String entradaReservados = String.format("%s,%s,%s,%d,%s,%s,%s,%s,%s,%s",
+                    usuarioLogeado.getRut(), usuarioLogeado.getNombre(), usuarioLogeado.getApellido(),
+                    nuevaCantidadReservados, libro.getIdLibro(), libro.getTituloLibro(), libro.getAutorLibro(), true, libro.getIsbnLibro(), libro.getEdicionLibro());
+
+            ReservaManager.agregarReservado(entradaReservados);
+            UsuarioManager.actualizarCantidadReservados(usuarioLogeado.getRut(), nuevaCantidadReservados);
+
+            libro.setEstadoLibro(true);
+
+            DefaultListModel<Libro> modeloLista = (DefaultListModel<Libro>) Lista_libros.getModel();
+            modeloLista.removeElementAt(indiceSeleccionado);
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor, seleccione un libro para reservar.",
+                    "Advertencia", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
     private void cargarDatosEnLista() {
         String filtroNombre = texBuscarLibro.getText().trim();
 
@@ -85,7 +118,7 @@ public class fmrMenu extends JFrame {
             librosData = LibroManager.obtenerTodosLibros();
         }
 
-        DefaultListModel<String> modeloLista = new DefaultListModel<>();
+        DefaultListModel<Libro> modeloLista = new DefaultListModel<>();
 
         if (librosData.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Libro no encontrado o nombre incorrecto.", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
@@ -98,50 +131,15 @@ public class fmrMenu extends JFrame {
                 String isbnLibro = libro.getIsbnLibro();
                 String edicionLibro = libro.getEdicionLibro();
 
-                // Formato más limpio
-                String infoLibro = String.format("%s | %s | %s | %s | %s | %s",
-                        idLibro, tituloLibro, autorLibro, estadoLibro ? "Reservado" : "Disponible", isbnLibro, edicionLibro);
+                if (!estadoLibro) {
+                    String infoLibro = String.format("%s | %s | %s | %s | %s | %s",
+                            idLibro, tituloLibro, autorLibro, estadoLibro ? "Reservado" : "Disponible", isbnLibro, edicionLibro);
 
-                modeloLista.addElement(infoLibro);
+                    modeloLista.addElement(libro);
+                }
             }
         }
 
         Lista_libros.setModel(modeloLista);
-    }
-
-    private void reservarLibro() {
-        int indiceSeleccionado = Lista_libros.getSelectedIndex();
-
-        if (librosData != null && indiceSeleccionado >= 0 && indiceSeleccionado < librosData.size()) {
-            Libro libro = librosData.get(indiceSeleccionado);
-            String idLibro = libro.getIdLibro();
-
-            if (ReservaManager.estaLibroReservado(idLibro)) {
-                JOptionPane.showMessageDialog(null, "Este libro ya está reservado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            Usuario usuarioLogeado = this.usuarioLogeado;
-
-            int nuevaCantidadReservados = usuarioLogeado.getCantidadReservados() + 1;
-            usuarioLogeado.setCantidadReservados(nuevaCantidadReservados);
-
-            String entradaReservados = String.format("%s,%s,%s,%d,%s,%s,%s,%s,%s,%s",
-                    usuarioLogeado.getRut(), usuarioLogeado.getNombre(), usuarioLogeado.getApellido(),
-                    nuevaCantidadReservados, idLibro, libro.getTituloLibro(), libro.getAutorLibro(), libro.isEstadoLibro(), libro.getIsbnLibro(), libro.getEdicionLibro());
-
-            ReservaManager.agregarReservado(entradaReservados);
-            UsuarioManager.actualizarCantidadReservados(usuarioLogeado.getRut(), nuevaCantidadReservados);
-
-            libro.setEstadoLibro(true);
-
-            DefaultListModel<String> modeloLista = (DefaultListModel<String>) Lista_libros.getModel();
-            modeloLista.removeElementAt(indiceSeleccionado);
-
-            cargarDatosEnLista();
-        } else {
-            JOptionPane.showMessageDialog(null, "Por favor, seleccione un libro para reservar.",
-                    "Advertencia", JOptionPane.WARNING_MESSAGE);
-        }
     }
 }
