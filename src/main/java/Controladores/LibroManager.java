@@ -1,5 +1,7 @@
 package Controladores;
 
+import Clases.Libro;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -10,8 +12,8 @@ public class LibroManager {
 
     public static final String nombreArchivoLibros = "Libros.csv";
 
-    public static List<Object[]> obtenerTodosLibros() {
-        List<Object[]> librosData = new ArrayList<>();
+    public static List<Libro> obtenerTodosLibros() {
+        List<Libro> librosData = new ArrayList<>();
 
         try {
             BufferedReader lector = new BufferedReader(new FileReader(nombreArchivoLibros));
@@ -36,8 +38,8 @@ public class LibroManager {
                     String edicionLibro = campos[5].trim();
                     String generoLibro = campos[6].trim();
 
-                    Object[] rowData = {idLibro, tituloLibro, autorLibro, estadoLibro, isbnLibro, edicionLibro, generoLibro};
-                    librosData.add(rowData);
+                    Libro libro = new Libro(idLibro, tituloLibro, autorLibro, estadoLibro, isbnLibro, edicionLibro, generoLibro);
+                    librosData.add(libro);
                 }
             }
             lector.close();
@@ -47,8 +49,8 @@ public class LibroManager {
         return librosData;
     }
 
-    public static List<Object[]> buscarLibrosPorNombre(String nombre) {
-        List<Object[]> librosData = new ArrayList<>();
+    public static List<Libro> buscarLibrosPorNombre(String nombre) {
+        List<Libro> librosData = new ArrayList<>();
 
         try {
             BufferedReader lector = new BufferedReader(new FileReader(nombreArchivoLibros));
@@ -74,8 +76,8 @@ public class LibroManager {
                     String generoLibro = campos[6].trim();
 
                     if (!estadoLibro && tituloLibro.equalsIgnoreCase(nombre)) {
-                        Object[] rowData = {idLibro, tituloLibro, autorLibro, estadoLibro, isbnLibro, edicionLibro, generoLibro};
-                        librosData.add(rowData);
+                        Libro libro = new Libro(idLibro, tituloLibro, autorLibro, estadoLibro, isbnLibro, edicionLibro, generoLibro);
+                        librosData.add(libro);
                     }
                 }
             }

@@ -4,8 +4,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-import java.util.ArrayList;
 import Controladores.*;
+import java.util.ArrayList;
 import Clases.*;
 
 public class fmrMenu extends JFrame {
@@ -17,7 +17,7 @@ public class fmrMenu extends JFrame {
     private JButton botCerrarSesion;
     private JButton botMostrarPerfil;
     private JPanel jpMenu;
-    private List<Object[]> librosData;
+    private List<Libro> librosData;
     private fmrLogin ventanaLogin;
     private Usuario usuarioLogeado;
 
@@ -77,14 +77,11 @@ public class fmrMenu extends JFrame {
     }
 
     private void cargarDatosEnLista() {
-
         String filtroNombre = texBuscarLibro.getText().trim();
 
         if (!filtroNombre.isEmpty()) {
-
             librosData = LibroManager.buscarLibrosPorNombre(filtroNombre);
         } else {
-
             librosData = LibroManager.obtenerTodosLibros();
         }
 
@@ -93,20 +90,19 @@ public class fmrMenu extends JFrame {
         if (librosData.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Libro no encontrado o nombre incorrecto.", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            for (Object[] rowData : librosData) {
-                String idLibro = (String) rowData[0];
-                String tituloLibro = (String) rowData[1];
-                String autorLibro = (String) rowData[2];
-                boolean estadoLibro = (boolean) rowData[3];
-                String isbnLibro = (String) rowData[4];
-                String edicionLibro = (String) rowData[5];
+            for (Libro libro : librosData) {
+                String idLibro = libro.getIdLibro();
+                String tituloLibro = libro.getTituloLibro();
+                String autorLibro = libro.getAutorLibro();
+                boolean estadoLibro = libro.isEstadoLibro();
+                String isbnLibro = libro.getIsbnLibro();
+                String edicionLibro = libro.getEdicionLibro();
 
-                if (!estadoLibro) {
-                    String infoLibro = String.format("%s | %s | %s | %s | %s | %s",
-                            idLibro, tituloLibro, autorLibro, estadoLibro ? "Reservado" : "Disponible", isbnLibro, edicionLibro);
+                // Formato más limpio
+                String infoLibro = String.format("%s | %s | %s | %s | %s | %s",
+                        idLibro, tituloLibro, autorLibro, estadoLibro ? "Reservado" : "Disponible", isbnLibro, edicionLibro);
 
-                    modeloLista.addElement(infoLibro);
-                }
+                modeloLista.addElement(infoLibro);
             }
         }
 
@@ -117,8 +113,8 @@ public class fmrMenu extends JFrame {
         int indiceSeleccionado = Lista_libros.getSelectedIndex();
 
         if (librosData != null && indiceSeleccionado >= 0 && indiceSeleccionado < librosData.size()) {
-            Object[] rowData = librosData.get(indiceSeleccionado);
-            String idLibro = (String) rowData[0];
+            Libro libro = librosData.get(indiceSeleccionado);
+            String idLibro = libro.getIdLibro();
 
             if (ReservaManager.estaLibroReservado(idLibro)) {
                 JOptionPane.showMessageDialog(null, "Este libro ya está reservado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -132,12 +128,12 @@ public class fmrMenu extends JFrame {
 
             String entradaReservados = String.format("%s,%s,%s,%d,%s,%s,%s,%s,%s,%s",
                     usuarioLogeado.getRut(), usuarioLogeado.getNombre(), usuarioLogeado.getApellido(),
-                    nuevaCantidadReservados, idLibro, rowData[1], rowData[2], rowData[3], rowData[4], rowData[5]);
+                    nuevaCantidadReservados, idLibro, libro.getTituloLibro(), libro.getAutorLibro(), libro.isEstadoLibro(), libro.getIsbnLibro(), libro.getEdicionLibro());
 
             ReservaManager.agregarReservado(entradaReservados);
             UsuarioManager.actualizarCantidadReservados(usuarioLogeado.getRut(), nuevaCantidadReservados);
 
-            rowData[3] = true;
+            libro.setEstadoLibro(true);
 
             DefaultListModel<String> modeloLista = (DefaultListModel<String>) Lista_libros.getModel();
             modeloLista.removeElementAt(indiceSeleccionado);
@@ -148,5 +144,4 @@ public class fmrMenu extends JFrame {
                     "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
     }
-
 }
