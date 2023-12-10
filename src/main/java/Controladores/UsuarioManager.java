@@ -62,7 +62,7 @@ public class UsuarioManager {
             while ((linea = lector.readLine()) != null) {
                 if (primeraLinea) {
                     primeraLinea = false;
-                    lineas.add(linea);  // Agrega la primera línea sin cambios
+                    lineas.add(linea);
                     continue;
                 }
 
@@ -72,7 +72,7 @@ public class UsuarioManager {
                     campos[5] = String.valueOf(nuevaCantidadReservados);
                     lineas.add(String.join(",", campos));
                 } else {
-                    lineas.add(linea);  // Agrega las demás líneas sin cambios
+                    lineas.add(linea);
                 }
             }
             lector.close();

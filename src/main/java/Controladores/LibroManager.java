@@ -78,7 +78,7 @@ public class LibroManager {
                     String edicionLibro = campos[5].trim();
                     String generoLibro = campos[6].trim();
 
-                    // Verificar si el criterio coincide con alguno de los campos
+
                     if (!estadoLibro && (tituloLibro.contains(criterio) || autorLibro.contains(criterio) ||
                             isbnLibro.contains(criterio) || generoLibro.contains(criterio))) {
                         Libro libro = new Libro(idLibro, tituloLibro, autorLibro, estadoLibro, isbnLibro, edicionLibro, generoLibro);

@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import Clases.*;
+
 public class fmrPerfil extends JFrame {
     private JPanel jpPerfil;
     private JLabel labNombre;
@@ -18,7 +20,10 @@ public class fmrPerfil extends JFrame {
     private JLabel labEstado;
     private JButton botMostrarMenu;
 
-    public fmrPerfil() {
+    private fmrLogin ventanaLogin;
+
+    public fmrPerfil(fmrLogin ventanaLogin, Usuario usuarioLogeado) {
+        this.ventanaLogin = ventanaLogin;
         initComponents();
     }
 
@@ -32,13 +37,11 @@ public class fmrPerfil extends JFrame {
         botMostrarMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Aquí puedes abrir la ventana del menú principal
-                fmrMenu ventanaMenu = new fmrMenu(null, null); // Reemplaza null con los parámetros correctos si es necesario
+                fmrMenu ventanaMenu = new fmrMenu(ventanaLogin, null);
                 ventanaMenu.setVisible(true);
                 dispose(); // Cierra la ventana actual
             }
         });
 
-        // Agrega cualquier otra inicialización o lógica necesaria
     }
 }

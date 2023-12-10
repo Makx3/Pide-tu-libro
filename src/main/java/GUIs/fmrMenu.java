@@ -42,7 +42,9 @@ public class fmrMenu extends JFrame {
         botCerrarSesion.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Cierra la ventana actual
                 dispose();
+                // Muestra la ventana de inicio de sesión
                 ventanaLogin.setVisible(true);
             }
         });
@@ -67,7 +69,7 @@ public class fmrMenu extends JFrame {
         botMostrarPerfil.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                fmrPerfil ventanaPerfil = new fmrPerfil();
+                fmrPerfil ventanaPerfil = new fmrPerfil(ventanaLogin, usuarioLogeado);
                 ventanaPerfil.setVisible(true);
                 dispose();
             }
