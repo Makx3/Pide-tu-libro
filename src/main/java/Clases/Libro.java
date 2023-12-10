@@ -78,8 +78,10 @@ public class Libro {
 
     @Override
     public String toString() {
-        return String.format("%s | %s | %s | %s | %s | %s",
-                idLibro, tituloLibro, autorLibro, estadoLibro ? "Reservado" : "Disponible", isbnLibro, edicionLibro);
+        String estado = estadoLibro ? "Reservado" : "Disponible";
+
+        return String.format("%s | %s | %s | %s | %s | %s | %s",
+                idLibro, tituloLibro, autorLibro, estado, isbnLibro, edicionLibro, generoLibro);
     }
 
 }

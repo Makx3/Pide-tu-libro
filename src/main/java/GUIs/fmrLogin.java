@@ -32,6 +32,7 @@ public class fmrLogin extends JFrame {
                 Usuario usuarioLogeado = UsuarioManager.verificarAutenticacion(rut, contraseña);
 
                 if (usuarioLogeado != null) {
+                    limpiarCampos(); // Limpia los campos antes de abrir la ventana del menú
                     fmrMenu ventanaMenu = new fmrMenu(fmrLogin.this, usuarioLogeado);
                     ventanaMenu.setVisible(true);
                     dispose();

@@ -3,9 +3,9 @@ package GUIs;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 import Controladores.*;
-import java.util.ArrayList;
 import Clases.*;
 
 public class fmrMenu extends JFrame {
@@ -81,31 +81,44 @@ public class fmrMenu extends JFrame {
 
         if (librosData != null && indiceSeleccionado >= 0 && indiceSeleccionado < librosData.size()) {
             Libro libro = librosData.get(indiceSeleccionado);
+            String idLibro = libro.getIdLibro();
 
-            if (ReservaManager.estaLibroReservado(libro.getIdLibro())) {
+            if (ReservaManager.estaLibroReservado(idLibro)) {
                 JOptionPane.showMessageDialog(null, "Este libro ya está reservado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
             Usuario usuarioLogeado = this.usuarioLogeado;
 
+            // Verificar si el usuario ha alcanzado el límite de reservas
+            if (usuarioLogeado.getCantidadReservados() >= 3) {
+                JOptionPane.showMessageDialog(null, "Ya has alcanzado el límite de reservas (3 libros).", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
             int nuevaCantidadReservados = usuarioLogeado.getCantidadReservados() + 1;
             usuarioLogeado.setCantidadReservados(nuevaCantidadReservados);
 
             String entradaReservados = String.format("%s,%s,%s,%d,%s,%s,%s,%s,%s,%s",
                     usuarioLogeado.getRut(), usuarioLogeado.getNombre(), usuarioLogeado.getApellido(),
-                    nuevaCantidadReservados, libro.getIdLibro(), libro.getTituloLibro(), libro.getAutorLibro(), true, libro.getIsbnLibro(), libro.getEdicionLibro());
+                    nuevaCantidadReservados, idLibro, libro.getTituloLibro(), libro.getAutorLibro(), true, libro.getIsbnLibro(), libro.getEdicionLibro());
 
             ReservaManager.agregarReservado(entradaReservados);
             UsuarioManager.actualizarCantidadReservados(usuarioLogeado.getRut(), nuevaCantidadReservados);
 
+            // Actualizar estado del libro en el archivo CSV
+            LibroManager.actualizarEstadoLibro(idLibro, true);
+
             libro.setEstadoLibro(true);
 
             DefaultListModel<Libro> modeloLista = (DefaultListModel<Libro>) Lista_libros.getModel();
-            modeloLista.removeElementAt(indiceSeleccionado);
+            modeloLista.removeElement(libro);
+
+            cargarDatosEnLista();
+
+            JOptionPane.showMessageDialog(null, "Libro reservado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(null, "Por favor, seleccione un libro para reservar.",
-                    "Advertencia", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Por favor, seleccione un libro para reservar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -113,7 +126,7 @@ public class fmrMenu extends JFrame {
         String filtroNombre = texBuscarLibro.getText().trim();
 
         if (!filtroNombre.isEmpty()) {
-            librosData = LibroManager.buscarLibrosPorNombre(filtroNombre);
+            librosData = LibroManager.buscarLibrosPorCriterios(filtroNombre);
         } else {
             librosData = LibroManager.obtenerTodosLibros();
         }
@@ -121,22 +134,10 @@ public class fmrMenu extends JFrame {
         DefaultListModel<Libro> modeloLista = new DefaultListModel<>();
 
         if (librosData.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Libro no encontrado o nombre incorrecto.", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Libro no encontrado o criterio incorrecto.", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            for (Libro libro : librosData) {
-                String idLibro = libro.getIdLibro();
-                String tituloLibro = libro.getTituloLibro();
-                String autorLibro = libro.getAutorLibro();
-                boolean estadoLibro = libro.isEstadoLibro();
-                String isbnLibro = libro.getIsbnLibro();
-                String edicionLibro = libro.getEdicionLibro();
-
-                if (!estadoLibro) {
-                    String infoLibro = String.format("%s | %s | %s | %s | %s | %s",
-                            idLibro, tituloLibro, autorLibro, estadoLibro ? "Reservado" : "Disponible", isbnLibro, edicionLibro);
-
-                    modeloLista.addElement(libro);
-                }
+            for (Libro rowData : librosData) {
+                modeloLista.addElement(rowData);
             }
         }
 
