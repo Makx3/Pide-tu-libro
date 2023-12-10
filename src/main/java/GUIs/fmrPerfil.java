@@ -3,8 +3,7 @@ package GUIs;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import Clases.*;
+import Clases.Usuario;
 
 public class fmrPerfil extends JFrame {
     private JPanel jpPerfil;
@@ -19,15 +18,14 @@ public class fmrPerfil extends JFrame {
     private JLabel labUltimoReservadoCargado;
     private JLabel labEstado;
     private JButton botMostrarMenu;
+    private fmrMenu ventanaMenu;  // Nueva variable
 
-    private fmrLogin ventanaLogin;
-
-    public fmrPerfil(fmrLogin ventanaLogin, Usuario usuarioLogeado) {
-        this.ventanaLogin = ventanaLogin;
-        initComponents();
+    public fmrPerfil(fmrMenu ventanaMenu, Usuario usuarioLogeado) {
+        this.ventanaMenu = ventanaMenu;
+        initComponents(usuarioLogeado);
     }
 
-    private void initComponents() {
+    private void initComponents(Usuario usuarioLogeado) {
         setTitle("Perfil");
         setSize(800, 600);
         setLocationRelativeTo(null);
@@ -37,11 +35,16 @@ public class fmrPerfil extends JFrame {
         botMostrarMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                fmrMenu ventanaMenu = new fmrMenu(ventanaLogin, null);
-                ventanaMenu.setVisible(true);
+                if (ventanaMenu != null) {
+                    ventanaMenu.setVisible(true);
+                }
                 dispose(); // Cierra la ventana actual
             }
         });
 
+        labNombreCargado.setText(usuarioLogeado.getNombre());
+        labApellidoCargado.setText(usuarioLogeado.getApellido());
+        String estado = usuarioLogeado.isEstado() ? "Activo" : "Inactivo";
+        labEstadoCargado.setText(estado);
     }
 }

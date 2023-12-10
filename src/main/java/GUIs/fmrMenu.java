@@ -42,10 +42,10 @@ public class fmrMenu extends JFrame {
         botCerrarSesion.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Cierra la ventana actual
                 dispose();
-                // Muestra la ventana de inicio de sesión
-                ventanaLogin.setVisible(true);
+                if (fmrMenu.this.getVentanaLogin() != null) {
+                    fmrMenu.this.getVentanaLogin().setVisible(true);
+                }
             }
         });
 
@@ -69,7 +69,7 @@ public class fmrMenu extends JFrame {
         botMostrarPerfil.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                fmrPerfil ventanaPerfil = new fmrPerfil(ventanaLogin, usuarioLogeado);
+                fmrPerfil ventanaPerfil = new fmrPerfil(fmrMenu.this, usuarioLogeado);
                 ventanaPerfil.setVisible(true);
                 dispose();
             }
@@ -145,4 +145,8 @@ public class fmrMenu extends JFrame {
 
         Lista_libros.setModel(modeloLista);
     }
+    public fmrLogin getVentanaLogin() {
+        return ventanaLogin;
+    }
 }
+
