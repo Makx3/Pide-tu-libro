@@ -18,7 +18,7 @@ public class fmrPerfil extends JFrame {
     private JLabel labUltimoReservadoCargado;
     private JLabel labEstado;
     private JButton botMostrarMenu;
-    private fmrMenu ventanaMenu;  // Nueva variable
+    private fmrMenu ventanaMenu;
 
     public fmrPerfil(fmrMenu ventanaMenu, Usuario usuarioLogeado) {
         this.ventanaMenu = ventanaMenu;
@@ -38,7 +38,7 @@ public class fmrPerfil extends JFrame {
                 if (ventanaMenu != null) {
                     ventanaMenu.setVisible(true);
                 }
-                dispose(); // Cierra la ventana actual
+                dispose();
             }
         });
 

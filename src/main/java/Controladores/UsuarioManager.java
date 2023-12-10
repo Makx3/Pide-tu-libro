@@ -1,6 +1,6 @@
 package Controladores;
 
-import Clases.Usuario;
+import Clases.*;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -10,21 +10,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class UsuarioManager {
     public static final String nombreArchivoUsuarios = "Usuarios.csv";
-
     public static Usuario verificarAutenticacion(String rut, String contraseña) {
         try {
             BufferedReader lector = new BufferedReader(new FileReader(nombreArchivoUsuarios));
             String linea;
 
-            while ((linea = lector.readLine()) != null) {
-                // Ignorar la primera línea (encabezado)
-                if (linea.startsWith("RUT,CONTRASEÑA,NOMBRE,APELLIDO,ESTADO,CANTIDAD_RESERVADOS")) {
-                    continue;
-                }
+            // Ignora la primera línea (títulos)
+            lector.readLine();
 
+            while ((linea = lector.readLine()) != null) {
                 String[] campos = linea.split(",");
 
                 if (campos.length >= 6) {
@@ -45,14 +41,12 @@ public class UsuarioManager {
             }
 
             lector.close();
-        } catch (IOException ex) {
+        } catch (IOException | NumberFormatException ex) {
             System.err.println("Error al leer el archivo de usuarios: " + ex.getMessage());
         }
 
         return null;
     }
-
-
     public static void actualizarCantidadReservados(String rut, int nuevaCantidadReservados) {
         try {
             BufferedReader lector = new BufferedReader(new FileReader(nombreArchivoUsuarios));

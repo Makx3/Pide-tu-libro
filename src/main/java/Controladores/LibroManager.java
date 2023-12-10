@@ -52,45 +52,40 @@ public class LibroManager {
         return librosData;
     }
 
-    public static List<Libro> buscarLibrosPorCriterios(String criterio) {
-        List<Libro> librosData = new ArrayList<>();
+    public static List<Libro> buscarLibrosPorCriteriosExtendidos(String filtro) {
+        List<Libro> librosFiltrados = new ArrayList<>();
 
         try {
             BufferedReader lector = new BufferedReader(new FileReader(nombreArchivoLibros));
             String linea;
 
-            boolean primeraLinea = true;
-
             while ((linea = lector.readLine()) != null) {
-                if (primeraLinea) {
-                    primeraLinea = false;
-                    continue;
-                }
-
                 String[] campos = linea.split(",");
 
                 if (campos.length >= 7) {
                     String idLibro = campos[0].trim();
-                    String tituloLibro = campos[1].trim();
-                    String autorLibro = campos[2].trim();
-                    boolean estadoLibro = Boolean.parseBoolean(campos[3].trim());
-                    String isbnLibro = campos[4].trim();
-                    String edicionLibro = campos[5].trim();
-                    String generoLibro = campos[6].trim();
+                    String titulo = campos[1].trim();
+                    String autor = campos[2].trim();
+                    String estadoStr = campos[3].trim();
+                    String isbn = campos[4].trim();
+                    String edicion = campos[5].trim();
+                    String genero = campos[6].trim();
 
-
-                    if (!estadoLibro && (tituloLibro.contains(criterio) || autorLibro.contains(criterio) ||
-                            isbnLibro.contains(criterio) || generoLibro.contains(criterio))) {
-                        Libro libro = new Libro(idLibro, tituloLibro, autorLibro, estadoLibro, isbnLibro, edicionLibro, generoLibro);
-                        librosData.add(libro);
+                    // Verifica si algún campo coincide con el filtro
+                    if (titulo.contains(filtro) || autor.contains(filtro) || isbn.contains(filtro) || genero.contains(filtro)) {
+                        boolean estado = Boolean.parseBoolean(estadoStr);
+                        Libro libro = new Libro(idLibro, titulo, autor, estado, isbn, edicion, genero);
+                        librosFiltrados.add(libro);
                     }
                 }
             }
+
             lector.close();
         } catch (IOException e) {
-            System.err.println("Hubo un error al leer el archivo: " + e.getMessage());
+            System.err.println("Error al leer el archivo de libros: " + e.getMessage());
         }
-        return librosData;
+
+        return librosFiltrados;
     }
 
 

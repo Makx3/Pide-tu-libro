@@ -131,7 +131,7 @@ public class fmrMenu extends JFrame {
         String filtroNombre = texBuscarLibro.getText().trim();
 
         if (!filtroNombre.isEmpty()) {
-            librosData = LibroManager.buscarLibrosPorCriterios(filtroNombre);
+            librosData = LibroManager.buscarLibrosPorCriteriosExtendidos(filtroNombre);
         } else {
             librosData = LibroManager.obtenerTodosLibros();
         }
@@ -148,6 +148,7 @@ public class fmrMenu extends JFrame {
 
         Lista_libros.setModel(modeloLista);
     }
+
     public fmrLogin getVentanaLogin() {
         return ventanaLogin;
     }
