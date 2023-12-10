@@ -23,6 +23,7 @@ public class fmrLogin extends JFrame {
         setTitle("Login");
         setContentPane(jpLogin);
 
+        //>---Botón "Inciar sesión":
         botIniciarSesion.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

@@ -6,10 +6,17 @@ import java.awt.event.ActionListener;
 
 public class    fmrPerfil extends JFrame {
     private JPanel jpPerfil;
-    private JLabel labInformacion;
-    private JButton botCerrar;
     private JLabel labNombre;
     private JButton botMostrarReservas;
+    private JLabel labPerfil;
+    private JLabel labNombreCargado;
+    private JLabel labApellido;
+    private JLabel labApellidoCargado;
+    private JLabel labEstadoCargado;
+    private JLabel labUltimoLibroReservado;
+    private JLabel labUltimoReservadoCargado;
+    private JLabel labEstado;
+    private JButton botMostrarMenu;
 
     public fmrPerfil() {
         initComponents();
@@ -17,24 +24,12 @@ public class    fmrPerfil extends JFrame {
 
     private void initComponents() {
         setTitle("Perfil");
-        setSize(600, 700);
+        setSize(800, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setContentPane(jpPerfil);
+        botMostrarMenu.addActionListener(new ActionListener() {
 
-        jpPerfil = new JPanel();
-        labInformacion = new JLabel("Aquí va la información del perfil");
-        botCerrar = new JButton("Cerrar Perfil");
-
-        jpPerfil.add(labInformacion);
-        jpPerfil.add(botCerrar);
-
-        add(jpPerfil);
-
-        botCerrar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
         });
     }
 }

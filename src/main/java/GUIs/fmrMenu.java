@@ -35,7 +35,7 @@ public class fmrMenu extends JFrame {
         setTitle("Menú");
         setContentPane(jpMenu);
 
-        // Botón "Cerrar sesión":
+        //>---Botón "Cerrar sesión":
         botCerrarSesion.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -44,7 +44,7 @@ public class fmrMenu extends JFrame {
             }
         });
 
-        // Botón "Reservar":
+        //>---Botón "Reservar":
         reservarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -52,7 +52,7 @@ public class fmrMenu extends JFrame {
             }
         });
 
-        // Botón "Buscar":
+        //>---Botón "Buscar":
         btnBuscar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -60,7 +60,7 @@ public class fmrMenu extends JFrame {
             }
         });
 
-        // Botón "Mostrar perfil":
+        // >---Botón "Mostrar perfil":
         botMostrarPerfil.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
