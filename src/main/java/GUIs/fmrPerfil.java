@@ -49,7 +49,7 @@ public class fmrPerfil extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 fmrReservas ventanaReservas = new fmrReservas(fmrPerfil.this, usuarioLogeado);
                 ventanaReservas.setVisible(true);
-                dispose(); // Cierra la ventana actual (Perfil)
+                dispose();
             }
         });
 

@@ -64,9 +64,9 @@ public class LibroManager {
 
                 if (campos.length >= 7) {
                     String idLibro = campos[0].trim();
-                    String titulo = campos[1].trim();
-                    String autor = campos[2].trim();
-                    String estadoStr = campos[3].trim();
+                    String estadoStr = campos[1].trim(); // Estado en formato de cadena ("true" o "false")
+                    String titulo = campos[2].trim();
+                    String autor = campos[3].trim();
                     String isbn = campos[4].trim();
                     String edicion = campos[5].trim();
                     String genero = campos[6].trim();

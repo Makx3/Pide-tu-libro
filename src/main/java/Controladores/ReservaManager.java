@@ -135,5 +135,35 @@ public class ReservaManager {
 
         return false;
     }
+
+    public static List<String> obtenerReservasUsuario(String rutUsuario) {
+        List<String> reservasUsuario = new ArrayList<>();
+
+        try {
+            BufferedReader lector = new BufferedReader(new FileReader(nombreArchivoReservados));
+            String linea;
+
+            while ((linea = lector.readLine()) != null) {
+                String[] campos = linea.split(",");
+                if (campos.length >= 1 && campos[0].trim().equals(rutUsuario)) {
+                    // Obtener solo el título, autor, ISBN y fecha de la reserva
+                    String titulo = campos[5].trim();
+                    String autor = campos[6].trim();
+                    String isbn = campos[8].trim();
+                    String fechaReserva = campos[10].trim();
+
+                    // Incluye en la lista solo lo necesario
+                    String informacionLibro = String.format("%s - %s (%s) - Reservado el: %s", titulo, autor, isbn, fechaReserva);
+                    reservasUsuario.add(informacionLibro);
+                }
+            }
+
+            lector.close();
+        } catch (IOException ex) {
+            System.err.println("Error al obtener reservas del usuario: " + ex.getMessage());
+        }
+
+        return reservasUsuario;
+    }
 }
 
