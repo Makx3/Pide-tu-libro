@@ -82,52 +82,54 @@ public class fmrMenu extends JFrame {
     private void reservarLibro() {
         int indiceSeleccionado = Lista_libros.getSelectedIndex();
 
-        if (librosData != null && indiceSeleccionado >= 0 && indiceSeleccionado < librosData.size()) {
-            Libro libro = librosData.get(indiceSeleccionado);
-            String idLibro = libro.getIdLibro();
+        if (usuarioLogeado != null && usuarioLogeado.isEstado()) {
+            if (indiceSeleccionado >= 0 && indiceSeleccionado < librosData.size()) {
+                Libro libro = librosData.get(indiceSeleccionado);
+                String idLibro = libro.getIdLibro();
 
-            if (ReservaManager.estaLibroReservado(idLibro)) {
-                JOptionPane.showMessageDialog(null, "Este libro ya está reservado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-                return;
+                if (ReservaManager.estaLibroReservado(idLibro)) {
+                    JOptionPane.showMessageDialog(null, "Este libro ya está reservado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                // Verificar si el usuario ha alcanzado el límite de reservas
+                if (usuarioLogeado.getCantidadReservados() >= 3) {
+                    JOptionPane.showMessageDialog(null, "Ya has alcanzado el límite de reservas (3 libros).", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                int nuevaCantidadReservados = usuarioLogeado.getCantidadReservados() + 1;
+                usuarioLogeado.setCantidadReservados(nuevaCantidadReservados);
+
+                // Construir la entrada para agregar a Reservados
+                String entradaReservados = String.format("%s,%s,%s,%d,%s,%s,%s,%s,%s,%s",
+                        usuarioLogeado.getRut(), usuarioLogeado.getNombre(), usuarioLogeado.getApellido(),
+                        nuevaCantidadReservados, idLibro, libro.getTituloLibro(), libro.getAutorLibro(), true, libro.getIsbnLibro(), libro.getEdicionLibro());
+
+                // Agregar la reserva con la fecha
+                ReservaManager.agregarFecha(entradaReservados);
+
+                UsuarioManager.actualizarCantidadReservados(usuarioLogeado.getRut(), nuevaCantidadReservados);
+
+                // Actualizar estado del libro en el archivo CSV
+                LibroManager.actualizarEstadoLibro(idLibro, true);
+
+                libro.setEstadoLibro(true);
+
+                // Actualizar el último libro reservado en el objeto Usuario
+                usuarioLogeado.setUltimoLibroReservado(libro.getTituloLibro());
+
+                DefaultListModel<Libro> modeloLista = (DefaultListModel<Libro>) Lista_libros.getModel();
+                modeloLista.removeElement(libro);
+
+                cargarDatosEnLista();
+
+                JOptionPane.showMessageDialog(null, "Libro reservado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Por favor, seleccione un libro para reservar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             }
-
-            Usuario usuarioLogeado = this.usuarioLogeado;
-
-            // Verificar si el usuario ha alcanzado el límite de reservas
-            if (usuarioLogeado.getCantidadReservados() >= 3) {
-                JOptionPane.showMessageDialog(null, "Ya has alcanzado el límite de reservas (3 libros).", "Advertencia", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            int nuevaCantidadReservados = usuarioLogeado.getCantidadReservados() + 1;
-            usuarioLogeado.setCantidadReservados(nuevaCantidadReservados);
-
-            // Construir la entrada para agregar a Reservados
-            String entradaReservados = String.format("%s,%s,%s,%d,%s,%s,%s,%s,%s,%s",
-                    usuarioLogeado.getRut(), usuarioLogeado.getNombre(), usuarioLogeado.getApellido(),
-                    nuevaCantidadReservados, idLibro, libro.getTituloLibro(), libro.getAutorLibro(), true, libro.getIsbnLibro(), libro.getEdicionLibro());
-
-            // Agregar la reserva con la fecha
-            ReservaManager.agregarFecha(entradaReservados);
-
-            UsuarioManager.actualizarCantidadReservados(usuarioLogeado.getRut(), nuevaCantidadReservados);
-
-            // Actualizar estado del libro en el archivo CSV
-            LibroManager.actualizarEstadoLibro(idLibro, true);
-
-            libro.setEstadoLibro(true);
-
-            // Actualizar el último libro reservado en el objeto Usuario
-            usuarioLogeado.setUltimoLibroReservado(libro.getTituloLibro());
-
-            DefaultListModel<Libro> modeloLista = (DefaultListModel<Libro>) Lista_libros.getModel();
-            modeloLista.removeElement(libro);
-
-            cargarDatosEnLista();
-
-            JOptionPane.showMessageDialog(null, "Libro reservado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(null, "Por favor, seleccione un libro para reservar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "No puedes reservar libros. Por favor, devuelve el/los libros pendientes.", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
     }
 
