@@ -1,72 +1,105 @@
 package Clases;
+
+/**
+ * Corresponde a una representacion de un libro en la gestión de la biblioteca.
+ */
 public class Libro {
+    private String idLibro;
+    private String tituloLibro;
+    private String autorLibro;
+    private boolean estadoLibro;
+    private String isbnLibro;
+    private String edicionLibro;
+    private String generoLibro;
 
-    private String id, titulo, autor, genero;
-    private boolean estado;
-    private String ISBN, edicion;
-
-    public Libro(String id, String titulo, String autor, boolean estado, String ISBN, String edicion, String genero) {
-        this.id = id;
-        this.titulo = titulo;
-        this.autor = autor;
-        this.estado = estado;
-        this.ISBN = ISBN;
-        this.edicion = edicion;
-        this.genero = genero;
+    /**
+     * Constructor de la clase "Libro".
+     *
+     * @param idLibro ID único del libro.
+     * @param estadoLibro Estado de reserva del libro (reservado o disponible).
+     * @param tituloLibro Título del libro.
+     * @param autorLibro Autor del libro.
+     * @param isbnLibro ISBN del libro.
+     * @param edicionLibro Edición del libro.
+     * @param generoLibro Género al que pertenece el libro.
+     */
+    public Libro(String idLibro, boolean estadoLibro ,String tituloLibro, String autorLibro, String isbnLibro, String edicionLibro, String generoLibro) {
+        this.idLibro = idLibro;
+        this.estadoLibro = estadoLibro;
+        this.tituloLibro = tituloLibro;
+        this.autorLibro = autorLibro;
+        this.isbnLibro = isbnLibro;
+        this.edicionLibro = edicionLibro;
+        this.generoLibro = generoLibro;
     }
 
-    public String getId() {
-        return id;
+
+    public String getIdLibro() {
+        return idLibro;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setIdLibro(String idLibro) {
+        this.idLibro = idLibro;
     }
 
-    public String getTitulo() {
-        return titulo;
+    public String getTituloLibro() {
+        return tituloLibro;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public void setTituloLibro(String tituloLibro) {
+        this.tituloLibro = tituloLibro;
     }
 
-    public String getAutor() {
-        return autor;
+    public String getAutorLibro() {
+        return autorLibro;
     }
 
-    public void setAutor(String autor) {
-        this.autor = autor;
+    public void setAutorLibro(String autorLibro) {
+        this.autorLibro = autorLibro;
     }
 
-    public boolean isEstado() {
-        return estado;
+    public boolean isEstadoLibro() {
+        return estadoLibro;
     }
 
-    public void setEstado(boolean estado) {
-        this.estado = estado;
+    public void setEstadoLibro(boolean estadoLibro) {
+        this.estadoLibro = estadoLibro;
     }
 
-    public String getISBN() {
-        return ISBN;
+    public String getIsbnLibro() {
+        return isbnLibro;
     }
 
-    public void setISBN(String ISBN) {
-        this.ISBN = ISBN;
+    public void setIsbnLibro(String isbnLibro) {
+        this.isbnLibro = isbnLibro;
     }
 
-    public String getEdicion() {
-        return edicion;
+    public String getEdicionLibro() {
+        return edicionLibro;
     }
 
-    public void setEdicion(String edicion) {
-        this.edicion = edicion;
-    }
-    public String getGenero() {
-        return genero;
+    public void setEdicionLibro(String edicionLibro) {
+        this.edicionLibro = edicionLibro;
     }
 
-    public void setGenero(String genero) {
-        this.genero = genero;
+    public String getGeneroLibro() {
+        return generoLibro;
     }
+
+    public void setGeneroLibro(String generoLibro) {
+        this.generoLibro = generoLibro;
+    }
+
+    /**
+     * Retorna una representación en cadena del libro.
+     * @return String que representa el libro.
+     */
+    @Override
+    public String toString() {
+        String estado = estadoLibro ? "Reservado" : "Disponible";
+
+        return String.format("%s | %s | %s | %s | %s | %s | %s",
+                idLibro, estado ,tituloLibro, autorLibro, isbnLibro, edicionLibro, generoLibro);
+    }
+
 }

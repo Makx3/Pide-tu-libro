@@ -1,136 +1,103 @@
 package Controladores;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import Clases.Usuario;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-
-
+/**
+ * Corresponde a la clase encargada de manejar los datos de los usuarios.
+ */
 public class UsuarioManager {
+
+    /**
+     * Archivo .csv que almacena la lista de usuarios.
+     */
     public static final String nombreArchivoUsuarios = "Usuarios.csv";
 
+
+    /**
+     * Verifica la autenticación de un usuario mediante el rut y la contraseña.
+     *
+     * @param rut Rut del usuario.
+     * @param contraseña  Contraseña del usuario.
+     * @return Usuario autenticado si las credenciales son correctas; de lo contrario, retorna `null`.
+     */
     public static Usuario verificarAutenticacion(String rut, String contraseña) {
-        try {
-            BufferedReader lector = new BufferedReader(new FileReader(nombreArchivoUsuarios));
+        try (BufferedReader lector = new BufferedReader(new FileReader(nombreArchivoUsuarios))) {
             String linea;
 
-            boolean primeraLinea = true;
-
             while ((linea = lector.readLine()) != null) {
-                if (primeraLinea) {
-                    primeraLinea = false;
-                    continue;
-                }
-
                 String[] campos = linea.split(",");
 
-                if (campos.length >= 6) {
-                    String rutUsuario = campos[0].trim();
-                    String contraseñaUsuario = campos[1].trim();
-                    String nombreUsuario = campos[2].trim();
-                    String apellidoUsuario = campos[3].trim();
-                    boolean estadoUsuario = Boolean.parseBoolean(campos[4].trim());
-                    int reservadosUsuario = Integer.parseInt(campos[5].trim());
-
-                    if (rut.equals(rutUsuario) && contraseña.equals(contraseñaUsuario)) {
-                        lector.close();
-                        return new Usuario(rutUsuario, contraseñaUsuario, nombreUsuario, apellidoUsuario, estadoUsuario, reservadosUsuario);
-                    }
+                if (campos.length >= 3 && campos[0].trim().equals(rut) && campos[1].trim().equals(contraseña)) {
+                    return new Usuario(campos[0].trim(), campos[1].trim(), campos[2].trim(),
+                            campos[3].trim(), Boolean.parseBoolean(campos[4].trim()),
+                            Integer.parseInt(campos[5].trim()));
                 }
             }
-            lector.close();
-        } catch (IOException ex) {
-            System.err.println("Error al leer el archivo de usuarios: " + ex.getMessage());
+        } catch (IOException | NumberFormatException e) {
+            System.err.println("Error al verificar autenticación: " + e.getMessage());
         }
 
         return null;
     }
 
-
-    public static Usuario obtenerUsuarioPorRut(String rut) {
-        try {
-            BufferedReader lector = new BufferedReader(new FileReader(nombreArchivoUsuarios));
-            String linea;
-
-            boolean primeraLinea = true;
-
-            while ((linea = lector.readLine()) != null) {
-                if (primeraLinea) {
-                    primeraLinea = false;
-                    continue;
-                }
-
-                String[] campos = linea.split(",");
-
-                if (campos.length >= 6) {
-                    String rutUsuario = campos[0].trim();
-
-                    if (rut.equals(rutUsuario)) {
-                        String contraseña = campos[1].trim();
-                        String nombre = campos[2].trim();
-                        String apellido = campos[3].trim();
-                        boolean estado = Boolean.parseBoolean(campos[4].trim());
-                        int cantidadReservados = Integer.parseInt(campos[5].trim());
-
-                        lector.close();
-                        return new Usuario(rut, contraseña, nombre, apellido, estado, cantidadReservados);
-                    }
-                }
-            }
-            lector.close();
-        } catch (IOException ex) {
-            System.err.println("Error al leer el archivo de usuarios: " + ex.getMessage());
-        }
-
-        return null;
-    }
-
+    /**
+     * Actualiza la cantidad de libros reservados por un usuario en el sistema.
+     * @param rut Rut del usuario.
+     * @param nuevaCantidadReservados Nueva cantidad de libros reservados por el usuario.
+     */
     public static void actualizarCantidadReservados(String rut, int nuevaCantidadReservados) {
+        BufferedReader lector = null;
+        BufferedWriter escritor = null;
+
         try {
-            File archivo = new File(nombreArchivoUsuarios);
-            File archivoTemp = new File(nombreArchivoUsuarios + ".temp");
+            lector = new BufferedReader(new FileReader(nombreArchivoUsuarios));
+            List<String> lineas = new ArrayList<>();
 
-            BufferedReader lector = new BufferedReader(new FileReader(archivo));
-            BufferedWriter escritor = new BufferedWriter(new FileWriter(archivoTemp));
-
+            String linea;
             boolean primeraLinea = true;
 
-            while (lector.ready()) {
-                String linea = lector.readLine();
-
+            while ((linea = lector.readLine()) != null) {
                 if (primeraLinea) {
                     primeraLinea = false;
-                    escritor.write(linea);
+                    lineas.add(linea);
+                    continue;
+                }
+
+                String[] campos = linea.split(",");
+                if (campos.length >= 6 && campos[0].equals(rut)) {
+                    campos[5] = String.valueOf(nuevaCantidadReservados);
+                    lineas.add(String.join(",", campos));
                 } else {
-                    String[] campos = linea.split(",");
-                    if (campos.length >= 6) {
-                        String rutUsuario = campos[0].trim();
-                        String nuevaLinea = linea;
-
-                        if (rut.equals(rutUsuario)) {
-                            // Si el RUT coincide, actualiza la cantidad de reservados
-                            nuevaLinea = String.format("%s,%s,%s,%s,%s,%d",
-                                    campos[0], campos[1], campos[2], campos[3], campos[4], nuevaCantidadReservados);
-                        }
-
-                        escritor.write(nuevaLinea);
-                    }
-                    escritor.newLine();
+                    lineas.add(linea);
                 }
             }
 
-            lector.close();
-            escritor.close();
-
-            // Elimina el archivo original y renombra el temporal
-            archivo.delete();
-            archivoTemp.renameTo(archivo);
+            escritor = new BufferedWriter(new FileWriter(nombreArchivoUsuarios));
+            for (String nuevaLinea : lineas) {
+                escritor.write(nuevaLinea);
+                escritor.newLine();
+            }
         } catch (IOException e) {
-            System.err.println("Hubo un error al actualizar la cantidad de reservados: " + e.getMessage());
+            System.err.println("Error al actualizar la cantidad de reservados: " + e.getMessage());
+        } finally {
+            try {
+                if (lector != null) {
+                    lector.close();
+                }
+                if (escritor != null) {
+                    escritor.close();
+                }
+            } catch (IOException ex) {
+                System.err.println("Error al cerrar el lector/escritor: " + ex.getMessage());
+            }
         }
     }
 }

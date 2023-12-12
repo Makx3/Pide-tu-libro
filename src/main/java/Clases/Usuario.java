@@ -1,5 +1,8 @@
 package Clases;
 
+/**
+ * Corresponde a una representacion de un usuario en la gestión de la biblioteca.
+ */
 public class Usuario {
     private String rut;
     private String contraseña;
@@ -8,6 +11,16 @@ public class Usuario {
     private boolean estado;
     private int cantidadReservados;
 
+    /**
+     * Constructor de la clase "Usuario".
+     *
+     * @param rut RUT del usuario.
+     * @param contraseña Contraseña del usuario.
+     * @param nombre Nombre del usuario.
+     * @param apellido Apellido del usuario.
+     * @param estado Estado del usuario (true si está activo, false si está moroso).
+     * @param cantidadReservados Cantidad de libros reservados por el usuario.
+     */
     public Usuario(String rut, String contraseña, String nombre, String apellido, boolean estado, int cantidadReservados) {
         this.rut = rut;
         this.contraseña = contraseña;
@@ -17,46 +30,18 @@ public class Usuario {
         this.cantidadReservados = cantidadReservados;
     }
 
-
-
-    public String getRut() {
-        return rut;
-    }
-
-    public void setRut(String rut) {
-        this.rut = rut;
-    }
-
-    public String getContraseña() {
-        return contraseña;
-    }
-
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
-    }
+    public String getRut() { return rut; }
 
     public String getNombre() {
         return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
     }
 
     public String getApellido() {
         return apellido;
     }
 
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
     public boolean isEstado() {
         return estado;
-    }
-
-    public void setEstado(boolean estado) {
-        this.estado = estado;
     }
 
     public int getCantidadReservados() {
@@ -66,4 +51,5 @@ public class Usuario {
     public void setCantidadReservados(int cantidadReservados) {
         this.cantidadReservados = cantidadReservados;
     }
+
 }
