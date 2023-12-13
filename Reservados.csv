@@ -1,0 +1,8 @@
+RUT,NOMBRE,APELLIDO,RESERVADOS,ID,TITULO,AUTOR,ESTADO,ISBN,EDICION,FECHA
+
+278476944,Javier,Alcalde,1,30,The Hobbit,J.R.R. Tolkien,true,978-0-261-10237-7,1ª Edición,13-12-2023
+278476944,Javier,Alcalde,2,29,The Hitchhiker's Guide to the Galaxy,Douglas Adams,true,978-0-345-39180-3,1ª Edición,13-12-2023
+278476944,Javier,Alcalde,3,28,The Shining,Stephen King,true,978-84-9759-081-1,1ª Edición,13-12-2023
+212694959,Rodrigo,Gomez,1,27,Fahrenheit 451,Ray Bradbury,true,978-84-246-0891-9,1ª Edición,13-12-2023
+212694959,Rodrigo,Gomez,2,26,The Lord of the Flies,William Golding,true,978-0-14-312940-0,1ª Edición,13-12-2023
+212694959,Rodrigo,Gomez,3,25,The Great Expectations,Charles Dickens,true,978-84-9104-227-1,1ª Edición,13-12-2023
