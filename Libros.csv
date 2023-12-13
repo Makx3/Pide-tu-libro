@@ -3,9 +3,9 @@ ID,ESTADO,TITULO,AUTOR,ISBN,EDICION,GENERO
 2,true,Cien años de soledad,Gabriel García Márquez,978-84-376-0194-4,1ª Edición,Ficción
 3,true,1984,George Orwell,978-84-7509-237-4,2ª Edición,Ciencia Ficción
 4,true,Don Quijote de la Mancha,Miguel de Cervantes,978-84-376-0494-5,1ª Edición,Clásico
-5,false,Harry Potter y la piedra filosofal,J.K. Rowling,978-84-9838-225-6,3ª Edición,Fantasía
-6,false,Orgullo y prejuicio,Jane Austen,978-84-249-1491-4,1ª Edición,Romance
-7,false,La Odisea,Homero,978-84-376-0202-6,1ª Edición,Epic Poem
+5,true,Harry Potter y la piedra filosofal,J.K. Rowling,978-84-9838-225-6,3ª Edición,Fantasía
+6,true,Orgullo y prejuicio,Jane Austen,978-84-249-1491-4,1ª Edición,Romance
+7,true,La Odisea,Homero,978-84-376-0202-6,1ª Edición,Epic Poem
 8,false,Fundación,Isaac Asimov,978-84-450-7426-1,2ª Edición,Ciencia Ficción
 9,false,To Kill a Mockingbird,Harper Lee,978-0-06-112008-4,1ª Edición,Ficción
 10,false,El Gran Gatsby,F. Scott Fitzgerald,978-84-9104-225-7,1ª Edición,Ficción

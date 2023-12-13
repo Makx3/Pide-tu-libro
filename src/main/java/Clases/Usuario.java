@@ -5,7 +5,7 @@ package Clases;
  */
 public class Usuario {
     private String rut;
-    private String contraseña;
+    private String  contraseña;
     private String nombre;
     private String apellido;
     private boolean estado;
@@ -30,7 +30,31 @@ public class Usuario {
         this.cantidadReservados = cantidadReservados;
     }
 
+    // Setters
+    public void setRut(String rut) {
+        this.rut = rut;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contraseña = contrasena;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+
+
     public String getRut() { return rut; }
+
+    public String getContraseña() { return rut; }
 
     public String getNombre() {
         return nombre;
